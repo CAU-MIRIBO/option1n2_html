@@ -1,0 +1,120 @@
+<!--index.html-->
+<html>
+<head>
+    <script src="https://code.jquery.com/jquery-latest.min.js"></script>
+</head>
+<body>
+    <p id="example">stackoverflow_option2_result_tidy_up</p>
+    <input type="text" id="text" placeholder="option2 result">
+    <input type="button" id="execute" value="execute">
+
+    <p>&nbsp;</p>
+    <!-- option2 data값을 정돈하여 html 출력 -->
+    <div id="option2"></div>
+
+    
+    <script>
+
+        $('#execute').click(function(){
+
+            //서버로부터 받은 option2 -> JSON.parse 하기
+            var text = JSON.parse($('#text').val());
+            
+            stack_op2_tidy(text);
+            
+        });
+        function stack_op2_tidy(text)
+        {
+
+            str=text;
+            console.log(str);
+
+            //ask
+            $('#option2').append("Question");
+            $('#option2').append("<div>");
+            //paragraph, code 마다 구별해서 html 에 출력
+            for (var i in str['id']['ask']){
+                if(str['id']['ask'][i]==0){
+
+                    tmp=JSON.stringify(str['text']['ask'][i]);
+                    tmp=replaceBrTag(tmp); //엔터 위해
+                    tmp=JSON.parse(tmp);
+                    $('#option2').append(tmp);
+                }
+                else{
+                    tmp=JSON.stringify(str['text']['ask'][i]);
+                    tmp=replaceBrTag(tmp);
+                    tmp=JSON.parse(tmp);
+
+                    var div = document.createElement("div");
+                    div.innerHTML=
+                        '<details>\n'+
+                        '<summary>Code</summary>\n'+
+                        tmp+'\n'+
+                        '</details>\n';
+
+                    $('#option2').append(div);
+  
+                }
+            }
+            $('#option2').append("</div>");
+            
+            //ans
+            $('#option2').append("<br>Answer");
+            $('#option2').append("<div>");
+
+            for (var i in str['id']['ans']){
+                if(str['id']['ans'][i]==0){
+                    //console.log(str['text']['ans'][i]);
+                    tmp=JSON.stringify(str['text']['ans'][i]);
+                    tmp=replaceBrTag(tmp);
+                    tmp=JSON.parse(tmp);
+                    $('#option2').append(tmp);
+                }
+                else{
+                    tmp=JSON.stringify(str['text']['ans'][i]);
+                    tmp=replaceBrTag(tmp);
+                    tmp=JSON.parse(tmp);
+
+                    var div = document.createElement("div");
+                    div.innerHTML=
+                        '<details>\n'+
+                        '<summary>Code</summary>\n'+
+                        tmp+'\n'+
+                        '</details>\n';
+
+                    $('#option2').append(div);
+  
+                }
+            }
+            $('#option2').append("</div>");
+
+        }
+        function replaceBrTag(str)
+        {
+            if(str==undefined||str==null)
+            {
+                return "";
+            }
+            str=str.replace(/\r\n/ig,'<br>');
+            str=str.replace(/\\n/ig,'<br>');
+            str=str.replace(/\n/ig,'<br>');
+
+            //console.log(typeof(str))
+            var sliceStr = str.substr(str.length-2,1);
+            //console.log(sliceStr)
+            if(sliceStr!='>'){
+                str=str.substr(0,str.length-1);   //"
+                str=str.concat("<br>");
+                str=str.concat("\"");
+                //console.log(str)
+            }
+            return str;
+        }
+    
+        
+    </script>
+    
+    
+</body>
+</html>
