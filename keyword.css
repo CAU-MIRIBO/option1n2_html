@@ -1,0 +1,15 @@
+#keyword {
+
+    display:inline-block;
+    height: 30px;
+    line-height: 30px;
+    
+    text-align: center; 
+    vertical-align: middle;
+    
+    background-color: #DAA;
+    color:white;
+    
+    padding : 10px;
+    border-radius:20px;
+  }
